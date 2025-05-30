@@ -1,40 +1,36 @@
 # 💊 Smart MedConnect
 
-A full-stack healthcare platform that connects patients, doctors, pharmacies, and admins—equipped with digital prescriptions, smart doctor suggestions, OCR capabilities, and more.
+Smart MedConnect is a comprehensive full-stack healthcare platform that securely connects patients, doctors, pharmacies, and admins, enabling seamless appointment booking, doctor schedule management, pharmacy order processing, digital prescriptions, and AI-powered medical features—all within a user-friendly and role-based access system that streamlines healthcare by integrating essential services into one easy-to-use platform.
 
 ---
 
-## 🚀 Project Overview
-
-Smart MedConnect integrates modern healthcare tools into one platform—enabling users to book appointments, issue and receive prescriptions, place pharmacy orders, and access AI-powered medical services.
-
----
-
-## 🚀 Project Features by Development Phases
+## 🛠️ Completed Development Phases
 
 ### ✅ Phase 1: Project Setup & Authentication
-- User Roles: Patients, Doctors, Pharmacies, Admin
-- JWT Authentication
-- Role-based Login & Registration
-- React Forms & Routing
+- Multi-role User System: Patients, Doctors, Pharmacies, Admin
+- Secure JWT-based Authentication
+- Role-specific Login & Registration workflows
+- Responsive React forms & client-side routing
 
 ### ✅ Phase 2: Appointments & Dashboards
-- Patient Appointment Booking
-- Doctor Dashboard for Schedule & Appointments
-- Admin Dashboard with Analytics & Monitoring
-
-### ✅ Phase 3: Prescriptions
-- Digital Prescription Generation (Text/PDF)
-- Prescription Viewing for Patients
-
-### ✅ Phase 4: Pharmacy & Smart Features
-- Pharmacy Order Management
-- Prescription Upload & OCR (Tesseract + OpenCV)
-- Smart Doctor Recommendation (spaCy + Scikit-learn)
-
-### ✅ Phase 5: Extras
-- Payment Integration (Stripe/Razorpay)
-- Medicine Delivery Tracking with Google Maps
+- Patient-facing Appointment Booking System
+- Doctor Dashboard: View and manage schedules and appointments
+- Admin Dashboard: System analytics, user monitoring, and control panel
 
 ---
+
+## 🔜 Upcoming Features (Phases 3 to 5)
+
+### Phase 3: Prescriptions
+- Digital prescription creation & PDF generation
+- Patient-side prescription access and management
+
+### Phase 4: Pharmacy & Smart Features
+- Pharmacy order handling and status tracking
+- Prescription upload with OCR (Tesseract & OpenCV)
+- AI-driven smart doctor recommendations (spaCy & Scikit-learn)
+
+### Phase 5: Extras
+- Integrated payment gateways (Stripe, Razorpay)
+- Real-time medicine delivery tracking using Google Maps
 

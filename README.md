@@ -4,7 +4,7 @@ Smart MedConnect is a comprehensive full-stack healthcare platform that securely
 
 ---
 
-## 🛠️ Completed Development Phases
+## 🛠️ Completed Development Phases(backend only done)
 
 ### ✅ Phase 1: Project Setup & Authentication
 - Multi-role User System: Patients, Doctors, Pharmacies, Admin

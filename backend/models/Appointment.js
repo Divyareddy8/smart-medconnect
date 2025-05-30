@@ -5,6 +5,10 @@ const appointmentSchema = new mongoose.Schema({
   doctor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   date: { type: Date, required: true },
   reason: { type: String },
+  prescription: {
+  type: String,
+  default: ''
+},
   status: { type: String, enum: ['pending', 'confirmed', 'completed'], default: 'pending' }
 });
 

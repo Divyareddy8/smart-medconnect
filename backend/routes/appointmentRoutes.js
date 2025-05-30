@@ -1,5 +1,5 @@
 const express = require('express');
-const { bookAppointment, getDoctorAppointments, getAllAppointments } = require('../controllers/appointmentController');
+const { bookAppointment, getDoctorAppointments, getAllAppointments,addPrescription } = require('../controllers/appointmentController');
 const protect = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -12,5 +12,7 @@ router.get('/doctor', protect, getDoctorAppointments);
 
 // Admin - All appointments
 router.get('/all', protect, getAllAppointments);
+
+router.put('/prescription', protect, addPrescription);
 
 module.exports = router;

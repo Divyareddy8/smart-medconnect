@@ -37,3 +37,21 @@ exports.getAllAppointments = async (req, res) => {
     res.status(500).json({ message: 'Error fetching all appointments' });
   }
 };
+
+exports.addPrescription = async (req, res) => {
+  const { appointmentId, prescription } = req.body;
+  try {
+    if (req.user.role !== 'doctor') {
+      return res.status(403).json({ message: 'Only doctors can add prescriptions' });
+    }
+
+    const updated = await Appointment.findByIdAndUpdate(
+      appointmentId,
+      { prescription },
+      { new: true }
+    );
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating prescription', error: err.message });
+  }
+};

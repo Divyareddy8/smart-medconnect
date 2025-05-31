@@ -17,7 +17,7 @@ router.put('/prescription', protect, addPrescription);
 
 // Modifications:
 
-//Get your own appointments
+//Get your own appointments(patients)
 router.get('/self', protect, getOwnAppointments);
 
 //--------------------------------------------------------------------------

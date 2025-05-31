@@ -1,11 +1,13 @@
 const Appointment = require('../models/Appointment');
 const User = require('../models/User');
 
-// Book appointment
+// Book appointment - Only patients can book
 exports.bookAppointment = async (req, res) => {
-  //Modification
-  if (req.user.role !== 'patient') return res.status(400).json({ message: 'Bad Request', error: 'Only patient can book appointments' });
+  if (req.user.role !== 'patient') {
+    return res.status(400).json({ message: 'Bad Request', error: 'Only patients can book appointments' });
+  }
   const { doctorId, date, reason } = req.body;
+
   try {
     const appointment = new Appointment({
       patient: req.user.id,
@@ -20,69 +22,78 @@ exports.bookAppointment = async (req, res) => {
   }
 };
 
-// Get appointments for a doctor
+// Get all appointments for the logged-in doctor
 exports.getDoctorAppointments = async (req, res) => {
+  if (req.user.role !== 'doctor') {
+    return res.status(403).json({ message: 'Forbidden', error: 'Only doctors can view their appointments' });
+  }
+
   try {
-    const appointments = await Appointment.find({ doctor: req.user.id }).populate('patient', 'name email');
+    const appointments = await Appointment.find({ doctor: req.user.id })
+      .populate('patient', 'name email');
     res.json(appointments);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching appointments', error: err.message });
   }
 };
 
-// Admin - all appointments
+// Admin - Get all appointments (only admin role)
 exports.getAllAppointments = async (req, res) => {
-  //Modification
-  if (res.user.role !== 'admin') return res.status(400).json({ message: 'Bad Request', error: 'Only admins can view all appointments' });
+  console.log("🔍 Current user in getAllAppointments:", req.user);
+
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ message: 'Forbidden', error: 'Only admins can view all appointments' });
+  }
+
   try {
     const appointments = await Appointment.find().populate('patient doctor', 'name role email');
     res.json(appointments);
   } catch (err) {
-    res.status(500).json({ message: 'Error fetching all appointments' });
+    res.status(500).json({ message: 'Error fetching all appointments', error: err.message });
   }
 };
 
-exports.addPrescription = async (req, res) => {
-  const { appointmentId, prescription } = req.body;
-  try {
-    if (req.user.role !== 'doctor') {
-      return res.status(403).json({ message: 'Only doctors can add prescriptions' });
-    }
 
+// Add or update prescription - Only doctors
+exports.addPrescription = async (req, res) => {
+  if (req.user.role !== 'doctor') {
+    return res.status(403).json({ message: 'Forbidden', error: 'Only doctors can add prescriptions' });
+  }
+
+  const { appointmentId, prescription } = req.body;
+
+  try {
     const updated = await Appointment.findByIdAndUpdate(
       appointmentId,
       { prescription },
       { new: true }
     );
+    if (!updated) {
+      return res.status(404).json({ message: 'Appointment not found' });
+    }
     res.json(updated);
   } catch (err) {
     res.status(500).json({ message: 'Error updating prescription', error: err.message });
   }
 };
 
-/* Modifications */
-// Get your own appointments
+// Get appointments for logged-in user (patient or doctor)
 exports.getOwnAppointments = async (req, res) => {
-  if (req.user.role === 'patient'){
-    try {
-      const appointments = await Appointment.find({ patient: req.user.id }).populate('doctor', 'name email');
-      res.json(appointments);
-    } catch (err) {
-      res.status(500).json({ message: 'Error fetching appointments', error: err.message });
+  try {
+    let appointments;
+
+    if (req.user.role === 'patient') {
+      appointments = await Appointment.find({ patient: req.user.id })
+        .populate('doctor', 'name email');
+    } else if (req.user.role === 'doctor') {
+      appointments = await Appointment.find({ doctor: req.user.id })
+        .populate('patient', 'name email');
+    } else {
+      return res.status(400).json({ message: 'Bad Request', error: 'Appointments can only be viewed by patients or doctors' });
     }
-  }
-  else if (req.user.role === 'doctor'){
-    try {
-      const appointments = await Appointment.find({ doctor: req.user.id }).populate('patient', 'name email');
-      res.json(appointments);
-    } catch (err) {
-      res.status(500).json({ message: 'Error fetching appointments', error: err.message });
-    }
-  }
-  else {
-    res.status(400).json({message : 'Bad Request', error: 'Appointments can only be booked for a patient or a doctor'});
+
+    res.json(appointments);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching appointments', error: err.message });
   }
 };
-
-
-

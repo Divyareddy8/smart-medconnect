@@ -1,5 +1,5 @@
 const express = require('express');
-const { bookAppointment, getDoctorAppointments, getAllAppointments,addPrescription } = require('../controllers/appointmentController');
+const { bookAppointment, getDoctorAppointments, getAllAppointments,addPrescription, getOwnAppointments } = require('../controllers/appointmentController');
 const protect = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -14,5 +14,12 @@ router.get('/doctor', protect, getDoctorAppointments);
 router.get('/all', protect, getAllAppointments);
 
 router.put('/prescription', protect, addPrescription);
+
+// Modifications:
+
+//Get your own appointments
+router.get('/self', protect, getOwnAppointments);
+
+//--------------------------------------------------------------------------
 
 module.exports = router;

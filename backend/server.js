@@ -4,6 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const User = require('./models/User');
 const bcrypt = require('bcryptjs');
+const protect = require('./middleware/authMiddleware');
 
 dotenv.config();
 
@@ -45,6 +46,15 @@ app.use('/api/availability', availabilityRoutes);
 
 const adminRoutes = require('./routes/adminRoutes');
 app.use('/api/admin', adminRoutes);
+
+app.use('/api/doctors', async (req, res)=>{ //No need to protect it, users that arent logged in can also view details of all the doctors
+  try{
+    const doctors = await User.find({ role: 'doctor'}, '-password');
+    res.json(doctors);
+  } catch (error){
+    res.status(500).json(error.message);
+  }
+});
 
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

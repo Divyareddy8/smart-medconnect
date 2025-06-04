@@ -6,10 +6,8 @@ const dbApi = "http://localhost:5050/api/auth/login";
 export default function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
-    password: "",
-    role: "",
+    password: ""
   });
 
   const handleChange = (e) => {
@@ -18,12 +16,6 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      formData.role != "patient" &&
-      formData.role != "doctor" &&
-      formData.role != "admin"
-    )
-      alert("Invalid role");
     try {
       const res = await fetch(dbApi, {
         method: "POST",
@@ -39,11 +31,10 @@ export default function Login() {
       } else {
         // ✅ Save token to localStorage
         localStorage.setItem("token", data.token);
-
         // ✅ Navigate based on role
-        if (formData.role === "patient") navigate("/patient/home");
-        else if (formData.role === "doctor") navigate("/doctor/home");
-        else if (formData.role === "admin") navigate("/admin/home");
+        if (data.user.role === "patient") navigate("/patient/home");
+        else if (data.user.role === "doctor") navigate("/doctor/home");
+        else if (data.user.role === "admin") navigate("/admin/home");
       }
     } catch (err) {
       console.error(err);
@@ -54,12 +45,6 @@ export default function Login() {
     <div>
       <h1>Welcome to MediCare!</h1>
       <form onSubmit={handleSubmit}>
-        <label>Name:</label>
-        <br />
-        <input type="name" name="name" onChange={handleChange} required />
-        <br />
-        <br />
-
         <label>Email:</label>
         <br />
         <input type="email" name="email" onChange={handleChange} required />
@@ -74,12 +59,6 @@ export default function Login() {
           onChange={handleChange}
           required
         />
-        <br />
-        <br />
-
-        <label>Role:</label>
-        <br />
-        <input type="role" name="role" onChange={handleChange} required />
         <br />
         <br />
 

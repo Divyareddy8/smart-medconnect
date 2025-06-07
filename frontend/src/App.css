@@ -1,0 +1,28 @@
+button {
+    background-color: #EAEFEF;
+    border: "1px solid white"; 
+    margin:"2px";
+    width: "60px";
+    height: "40px"; 
+    border-radius : "20px";
+};
+
+button :active {
+    background-color : #AAAEAE;
+};
+
+button :hover {
+    background-color: #7c7f7f;
+};
+
+button .active {
+    background-color:#B8CFCE;
+};
+
+button .active:active {
+    background-color : #869795;
+};
+
+button .active:hover {
+    background-color : #636e6e;
+};

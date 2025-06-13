@@ -1,18 +1,18 @@
 import React from 'react';
-import LoginForm from '../components/auth/LoginForm';
+import RoleSelector from '../components/auth/RoleSelector';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 
-const Login = () => {
+const RegisterRole = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-grow flex items-center justify-center p-4">
-        <LoginForm />
+        <RoleSelector />
       </main>
       <Footer />
     </div>
   );
 };
 
-export default Login;
+export default RegisterRole;

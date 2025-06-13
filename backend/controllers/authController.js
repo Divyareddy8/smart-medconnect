@@ -2,6 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+//-----------------------------------------------------Helper fxn---------------------------------------------------------------------------------------------------
 function formatEmail(email) {
   const atIndex = email.indexOf('@');
   if (atIndex === -1) {
@@ -14,23 +15,24 @@ function formatEmail(email) {
   return localPart + domainPart;
 }
 
-//Modifications: 1) Format emails before adding them to the database, so emails are now case insensitive
-//               2) Admins can no longer Register. To login as the admin set email to admin@gmail.com and password as specified in the .env file
+
+//-----------------------------------------------------Register (admin, doctor, patient)---------------------------------------------------------------------------------------------------
+
 exports.registerUser = async (req, res) => {
-  const { name, email : em, password, role, defaultTimeSlots } = req.body;
+  const { name, email : em, password, role, defaultTimeSlots, specializations} = req.body;
   if (role != 'patient' && role != 'doctor') return res.status(400).json({ message: "Invalid role" });
   try {
-    const email = formatEmail(em)
+    const email = formatEmail(em);
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: "User already exists" });
-
+    
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = new User({ name, email, password: hashedPassword, role , defaultTimeSlots});
+    
+    const newUser = new User({ name, email, password: hashedPassword, role , defaultTimeSlots, specializations});
     await newUser.save();
-
+    
     const token = jwt.sign({ id: newUser._id, role: newUser.role }, process.env.JWT_SECRET);
-
+    
     res.status(201).json({
       token,
       user: {
@@ -45,7 +47,8 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-//Modification: Format email before searching the database. This way we can make email case insensitive
+//-----------------------------------------------------Login (admin, doctor, patient)---------------------------------------------------------------------------------------------------
+
 exports.loginUser = async (req, res) => {
   const { email : em, password } = req.body;
 

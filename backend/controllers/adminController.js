@@ -1,5 +1,7 @@
 const User = require('../models/User');
 
+//-----------------------------------------------------Set Consultation fee---------------------------------------------------------------------------------------------------
+
 exports.setConsultationFee = async (req, res) => {
   //Modification
   if (req.user.role !== 'admin') return res.status(403).json({ message: 'Forbidden', error: 'Only admin can set consultation fee' });

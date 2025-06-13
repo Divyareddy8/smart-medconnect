@@ -2,7 +2,8 @@ const Availability = require("../models/Availability");
 const Appointment = require("../models/Appointment");
 const User = require("../models/User");
 
-// Helper function
+//-----------------------------------------------------Helper Functions---------------------------------------------------------------------------------------------------
+
 async function cancelAppointments(doctorId, date, timeSlots) {
   const appointments = await Appointment.find({ doctor: doctorId, date });
   appointments.map(async (item) => {
@@ -12,9 +13,8 @@ async function cancelAppointments(doctorId, date, timeSlots) {
   });
 }
 
-// Only doctors can set availability
-//Modification: If the doctor modifies his/her working time slots for a particular day, all the appointments of this doctor
-//on this particular day, that clashes with the doctors new working hours will be cancelled
+//-----------------------------------------------------Set Availability (doctor)---------------------------------------------------------------------------------------------------
+
 exports.setAvailability = async (req, res) => {
   if (req.user.role !== "doctor") {
     return res.status(403).json({
@@ -22,15 +22,15 @@ exports.setAvailability = async (req, res) => {
       error: "Only doctor can set his/her availability",
     });
   }
-
+  
   const { date, timeSlots = [] } = req.body;
-
+  
   if (!date) {
     return res
-      .status(400)
-      .json({ message: "Bad request", error: "Date is required" });
+    .status(400)
+    .json({ message: "Bad request", error: "Date is required" });
   }
-
+  
   try {
     await cancelAppointments(req.user.id, date, timeSlots);
     const availability = await Availability.findOneAndUpdate(
@@ -38,7 +38,7 @@ exports.setAvailability = async (req, res) => {
       { timeSlots },
       { upsert: true, new: true }
     );
-
+    
     res.json(availability);
   } catch (err) {
     res.status(500).json({
@@ -48,10 +48,8 @@ exports.setAvailability = async (req, res) => {
   }
 };
 
-//Modification: * Every doctor will have a default working hour field, set by the doctor during registration
-//              * If there is data in Availability corresponding to a doctor on a particular date, it means doctor is free on the default working hours
-//              * Whenever there is a change in the doctors schedule on a particular date like some patient booking an appointment, etc then we will add a field in the Availability collection for the doctor on this date
-//------Modification: Added the option of getting availability of all the regisred doctors, in which case it returns an array of availabilities.
+//-----------------------------------------------------Get Availability (admin, doctor, patient)---------------------------------------------------------------------------------------------------
+
 exports.getAvailability = async (req, res) => {
   const { doctorId = "*", date } = req.query;
 

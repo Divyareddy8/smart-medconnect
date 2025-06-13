@@ -47,6 +47,9 @@ app.use('/api/availability', availabilityRoutes);
 const adminRoutes = require('./routes/adminRoutes');
 app.use('/api/admin', adminRoutes);
 
+const prescriptionRoutes = require('./routes/prescriptionRoutes');
+app.use('/api/prescription', prescriptionRoutes);
+
 app.use('/api/doctors', async (req, res)=>{ //No need to protect it, users that arent logged in can also view details of all the doctors
   try{
     const doctors = await User.find({ role: 'doctor'}, '-password');

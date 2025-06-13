@@ -7,8 +7,8 @@ const appointmentSchema = new mongoose.Schema({
   time: {type: String, required : true}, //Modification: added time
   reason: { type: String },
   prescription: {
-  type: String,
-  default: ''
+  type: mongoose.Schema.Types.ObjectId, //prescription now refers prescription collection
+  ref: 'Prescription',
 },
   status: { type: String, enum: ['pending', 'confirmed', 'completed', 'cancelled'], default: 'pending' } //Modification: Added cancelled
 });

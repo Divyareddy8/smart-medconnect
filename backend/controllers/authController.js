@@ -75,3 +75,31 @@ exports.loginUser = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+//----------------------------------to Get All Specializations--------------------
+exports.getAllSpecializations = async (req, res) => {
+  try {
+    const users = await User.find({ role: "doctor" });
+    const specSet = new Set();
+    users.forEach((user) => {
+      if (user.specializations) {
+        user.specializations.forEach((s) => specSet.add(s));
+      }
+    });
+    res.json([...specSet]);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching specializations" });
+  }
+};
+//----------------------------------Get Doctors by Specialization--------
+exports.getDoctorsBySpecialization = async (req, res) => {
+  const { specialization } = req.query;
+  try {
+    const doctors = await User.find({
+      role: "doctor",
+      specializations: specialization,
+    });
+    res.json(doctors);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching doctors" });
+  }
+};

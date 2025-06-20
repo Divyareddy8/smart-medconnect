@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { register } from '../../api/authApi';
 import { useNavigate } from 'react-router-dom';
+import SpecializationSelector from '../patient/SpecializationSelector';
 
 const RegisterForm = ({ role }) => {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [specialization, setSpecialization] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -12,23 +14,56 @@ const RegisterForm = ({ role }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    let payload = { ...form, role };
+    if (role === 'doctor') {
+      payload.specializations = [specialization];
+      payload.defaultTimeSlots = ['09:00', '11:00', '14:00'];
+    }
+
     try {
-      await register({ ...form, role });
+      await register(payload);
       alert('Registered successfully!');
       navigate('/login');
     } catch (err) {
       alert('Registration failed.');
+      console.error(err);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-      <h2 className="text-xl font-bold mb-4">Register as {role}</h2>
-      <input type="text" name="name" placeholder="Name" onChange={handleChange} className="mb-2 p-2 border rounded w-full" />
-      <input type="email" name="email" placeholder="Email" onChange={handleChange} className="mb-2 p-2 border rounded w-full" />
-      <input type="password" name="password" placeholder="Password" onChange={handleChange} className="mb-4 p-2 border rounded w-full" />
-      <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded w-full">Register</button>
-    </form>
+    <div className="d-flex flex-column min-vh-100 bg-info text-white">
+      <main className="flex-grow-1 d-flex align-items-center justify-content-center px-3">
+        <div className="card shadow" style={{ maxWidth: '450px', width: '100%' }}>
+          <div className="card-body">
+            <h3 className="card-title text-center mb-4 text-dark">
+              Register as {role.charAt(0).toUpperCase() + role.slice(1)}
+            </h3>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label className="form-label text-dark">Full Name</label>
+                <input type="text" name="name" className="form-control" onChange={handleChange} required />
+              </div>
+              <div className="mb-3">
+                <label className="form-label text-dark">Email</label>
+                <input type="email" name="email" className="form-control" onChange={handleChange} required />
+              </div>
+              <div className="mb-3">
+                <label className="form-label text-dark">Password</label>
+                <input type="password" name="password" className="form-control" onChange={handleChange} required />
+              </div>
+              {role === 'doctor' && (
+                <div className="mb-3">
+                  <label className="form-label text-dark">Specialization</label>
+                  <SpecializationSelector onSelect={setSpecialization} />
+                </div>
+              )}
+              <button type="submit" className="btn btn-success w-100">Register</button>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 };
 

@@ -1,9 +1,9 @@
 // src/api/axios.js
 import axios from 'axios';
-import { getToken } from '../utils/tokenHelper'; // ✅ correct import
+import { getToken } from '../utils/tokenHelper';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5050/api', // ✅ correct base URL for backend
+  baseURL: 'http://localhost:5000/api', //  Must match backend port
 });
 
 instance.interceptors.request.use((config) => {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/common/Header';
+import Footer from '../components/common/Footer';
 import AppointmentCard from '../components/patient/AppointmentCard';
 import PrescriptionList from '../components/patient/PrescriptionList';
 import { Link } from 'react-router-dom';
@@ -27,30 +28,37 @@ const PatientDashboard = () => {
   }, []);
 
   return (
-    <div className="p-4 bg-gray-50 min-h-screen">
+    <div className="d-flex flex-column min-vh-100 bg-light">
       <Header />
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-semibold mb-4">Welcome back, Divya 👋</h2>
+      <main className="flex-grow-1 container py-4">
+        <h2 className="mb-4 display-6 fw-semibold">Welcome !👋</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white shadow p-4 rounded-lg">
-            <h3 className="text-xl font-bold mb-2">Your Upcoming Appointments</h3>
-            {appointments.length ? (
-              appointments.map((appt) => (
-                <AppointmentCard key={appt._id} appointment={appt} />
-              ))
-            ) : (
-              <p>No upcoming appointments.</p>
-            )}
-            <Link to="/book" className="mt-4 block text-blue-500">+ Book new appointment</Link>
+        <div className="row g-4">
+          <div className="col-md-6">
+            <div className="bg-white p-4 rounded shadow-sm">
+              <h4 className="fw-bold mb-3">Your Upcoming Appointments</h4>
+              {appointments.length ? (
+                appointments.map((appt) => (
+                  <AppointmentCard key={appt._id} appointment={appt} />
+                ))
+              ) : (
+                <p>No upcoming appointments.</p>
+              )}
+              <Link to="/book" className="btn btn-outline-primary mt-3">
+                + Book new appointment
+              </Link>
+            </div>
           </div>
 
-          <div className="bg-white shadow p-4 rounded-lg">
-            <h3 className="text-xl font-bold mb-2">Recent Prescriptions</h3>
-            <PrescriptionList prescriptions={prescriptions} />
+          <div className="col-md-6">
+            <div className="bg-white p-4 rounded shadow-sm">
+              <h4 className="fw-bold mb-3">Recent Prescriptions</h4>
+              <PrescriptionList prescriptions={prescriptions} />
+            </div>
           </div>
         </div>
-      </div>
+      </main>
+      <Footer />
     </div>
   );
 };

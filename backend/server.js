@@ -6,6 +6,7 @@ const User = require('./models/User');
 const bcrypt = require('bcryptjs');
 const protect = require('./middleware/authMiddleware');
 
+
 dotenv.config();
 
 const app = express();
@@ -37,6 +38,7 @@ connectDB();
 // Routes
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
 
 const appointmentRoutes = require('./routes/appointmentRoutes');
 app.use('/api/appointments', appointmentRoutes);
@@ -58,8 +60,10 @@ app.use('/api/doctors', async (req, res)=>{ //No need to protect it, users that 
     res.status(500).json(error.message);
   }
 });
+const doctorRoutes = require('./routes/doctorRoutes');
+app.use('/api/doctors', doctorRoutes);
 
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 const cron = require('node-cron');

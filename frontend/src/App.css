@@ -1,7 +1,9 @@
+/* Layout */
 .app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: #f8f9fa;
 }
 
 main {
@@ -9,11 +11,18 @@ main {
   padding: 20px;
 }
 
+/* Typography */
 h1, h2, h3 {
-  color: #1d3557;
+  color: #1d3557; /* Deep navy blue for strong titles */
 }
 
-button {
+p {
+  color: #444;
+  margin-bottom: 0.5rem;
+}
+
+/* Buttons */
+button, .btn-custom {
   background-color: rgba(0, 0, 255, 0.448);
   color: white;
   border: none;
@@ -23,10 +32,41 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: rgba(0, 0, 255, 0.448);
+button:hover, .btn-custom:hover {
+  background-color: rgba(0, 0, 255, 0.6);
 }
+
+/* Inputs */
+input, select, textarea {
+  border-radius: 6px;
+  padding: 8px 10px;
+  border: 1px solid #ced4da;
+  width: 100%;
+  margin-top: 6px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+/* Image */
 img {
   display: block;
   max-width: 100%;
+}
+
+/* Card consistency */
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  background-color: white;
+}
+
+/* Footer */
+footer {
+  background-color: #f8f9fa;
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: auto;
+  box-shadow: 0 -1px 5px rgba(0,0,0,0.05);
 }

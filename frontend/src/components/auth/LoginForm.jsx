@@ -16,47 +16,34 @@ const LoginForm = () => {
     try {
       const res = await login(form);
       setToken(res.data.token);
-
       const role = res.data.user.role;
-
-      // ✅ Correct redirection based on defined routes
-      if (role === 'patient') {
-        navigate('/patient');
-      } else if (role === 'doctor') {
-        navigate('/doctor');
-      } else if (role === 'admin') {
-        navigate('/admin');
-      } else if (role === 'pharmacy') {
-        navigate('/pharmacy');
-      } else {
-        navigate('/');
-      }
+      navigate(`/${role}`);
     } catch (err) {
       alert('Login failed. Please check your credentials.');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-      <h2 className="text-xl font-bold mb-4">Login</h2>
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        onChange={handleChange}
-        className="mb-2 p-2 border rounded w-full"
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        onChange={handleChange}
-        className="mb-2 p-2 border rounded w-full"
-      />
-      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded w-full">
-        Login
-      </button>
-    </form>
+    <div className="d-flex flex-column min-vh-100 bg-info text-white">
+      <main className="flex-grow-1 d-flex align-items-center justify-content-center px-3">
+        <div className="card shadow" style={{ maxWidth: '400px', width: '100%' }}>
+          <div className="card-body">
+            <h3 className="card-title text-center mb-4 text-dark">Login</h3>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label className="form-label text-dark">Email address</label>
+                <input type="email" name="email" className="form-control" onChange={handleChange} required />
+              </div>
+              <div className="mb-4">
+                <label className="form-label text-dark">Password</label>
+                <input type="password" name="password" className="form-control" onChange={handleChange} required />
+              </div>
+              <button type="submit" className="btn btn-primary w-100">Login</button>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 };
 

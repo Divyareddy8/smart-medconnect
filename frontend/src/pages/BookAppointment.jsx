@@ -1,13 +1,17 @@
 import React from 'react';
-import BookAppointmentForm from '../components/patient/BookAppointmentForm';
 import Header from '../components/common/Header';
+import Footer from '../components/common/Footer';
+import BookAppointmentForm from '../components/patient/BookAppointmentForm';
 
 const BookAppointment = () => {
   return (
-    <div className="p-4">
+    <div className="d-flex flex-column min-vh-100">
       <Header />
-      <h2 className="text-2xl font-bold mb-4">Book Appointment</h2>
-      <BookAppointmentForm />
+      <main className="flex-grow-1 container py-4">
+        <h2 className="mb-4 display-6 fw-bold text-success">Book an Appointment</h2>
+        <BookAppointmentForm />
+      </main>
+      <Footer />
     </div>
   );
 };

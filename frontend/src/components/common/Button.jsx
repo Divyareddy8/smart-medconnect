@@ -1,11 +1,5 @@
-import React from 'react';
-
 const Button = ({ children, onClick, type = 'button', className = '' }) => (
-  <button
-    type={type}
-    onClick={onClick}
-    className={`btn btn-primary ${className}`}
-  >
+  <button type={type} onClick={onClick} className={`btn btn-primary ${className}`}>
     {children}
   </button>
 );

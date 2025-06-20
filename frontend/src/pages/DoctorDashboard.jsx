@@ -1,15 +1,19 @@
 import React from 'react';
+import Header from '../components/common/Header';
+import Footer from '../components/common/Footer';
 import AppointmentTable from '../components/doctor/AppointmentTable';
 import PrescriptionForm from '../components/doctor/PrescriptionForm';
-import Header from '../components/common/Header';
 
 const DoctorDashboard = () => {
   return (
-    <div className="p-4">
+    <div className="d-flex flex-column min-vh-100">
       <Header />
-      <h2 className="text-2xl font-bold mb-4">Doctor Panel</h2>
-      <AppointmentTable />
-      <PrescriptionForm />
+      <main className="flex-grow-1 container py-4">
+        <h2 className="mb-4 display-6 fw-bold text-info">Doctor Panel</h2>
+        <AppointmentTable />
+        <PrescriptionForm />
+      </main>
+      <Footer />
     </div>
   );
 };

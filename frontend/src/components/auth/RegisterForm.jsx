@@ -32,37 +32,35 @@ const RegisterForm = ({ role }) => {
   };
 
   return (
-    <div className="d-flex flex-column min-vh-100 bg-info text-white">
-      <main className="flex-grow-1 d-flex align-items-center justify-content-center px-3">
-        <div className="card shadow" style={{ maxWidth: '450px', width: '100%' }}>
-          <div className="card-body">
-            <h3 className="card-title text-center mb-4 text-dark">
-              Register as {role.charAt(0).toUpperCase() + role.slice(1)}
-            </h3>
-            <form onSubmit={handleSubmit}>
+    <div className="w-100 d-flex justify-content-center align-items-center" style={{ minHeight: '100vh', backgroundColor: '#0dcaf0' }}>
+      <div className="card shadow" style={{ maxWidth: '450px', width: '100%' }}>
+        <div className="card-body">
+          <h3 className="card-title text-center mb-4 text-dark">
+            Register as {role.charAt(0).toUpperCase() + role.slice(1)}
+          </h3>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label className="form-label text-dark">Full Name</label>
+              <input type="text" name="name" className="form-control" onChange={handleChange} required />
+            </div>
+            <div className="mb-3">
+              <label className="form-label text-dark">Email</label>
+              <input type="email" name="email" className="form-control" onChange={handleChange} required />
+            </div>
+            <div className="mb-3">
+              <label className="form-label text-dark">Password</label>
+              <input type="password" name="password" className="form-control" onChange={handleChange} required />
+            </div>
+            {role === 'doctor' && (
               <div className="mb-3">
-                <label className="form-label text-dark">Full Name</label>
-                <input type="text" name="name" className="form-control" onChange={handleChange} required />
+                <label className="form-label text-dark">Specialization</label>
+                <SpecializationSelector onSelect={setSpecialization} />
               </div>
-              <div className="mb-3">
-                <label className="form-label text-dark">Email</label>
-                <input type="email" name="email" className="form-control" onChange={handleChange} required />
-              </div>
-              <div className="mb-3">
-                <label className="form-label text-dark">Password</label>
-                <input type="password" name="password" className="form-control" onChange={handleChange} required />
-              </div>
-              {role === 'doctor' && (
-                <div className="mb-3">
-                  <label className="form-label text-dark">Specialization</label>
-                  <SpecializationSelector onSelect={setSpecialization} />
-                </div>
-              )}
-              <button type="submit" className="btn btn-success w-100">Register</button>
-            </form>
-          </div>
+            )}
+            <button type="submit" className="btn btn-success w-100">Register</button>
+          </form>
         </div>
-      </main>
+      </div>
     </div>
   );
 };

@@ -24,7 +24,7 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="d-flex flex-column min-vh-100 bg-info text-white">
+    <div className="d-flex flex-column vh-100 bg-info text-white w-100 m-0">
       <main className="flex-grow-1 d-flex align-items-center justify-content-center px-3">
         <div className="card shadow" style={{ maxWidth: '400px', width: '100%' }}>
           <div className="card-body">

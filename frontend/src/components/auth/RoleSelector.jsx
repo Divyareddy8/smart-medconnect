@@ -13,7 +13,7 @@ const RoleSelector = () => {
       <div className="text-center w-100" style={{ maxWidth: '500px' }}>
         <h3 className="mb-4">Select Your Role</h3>
         <div className="row justify-content-center">
-          {['Patient', 'Doctor', 'Pharmacy', 'Admin'].map((role) => (
+          {['Patient', 'Doctor'].map((role) => (
             <div key={role} className="col-6 col-md-3 mb-3">
               <button
                 className="btn btn-light w-100 text-dark fw-semibold"

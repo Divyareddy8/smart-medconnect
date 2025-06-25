@@ -147,7 +147,7 @@ exports.getDoctorAppointments = async (req, res) => {
 //-----------------------------------------------------Get all appointments (admin)---------------------------------------------------------------------------------------------------
 
 exports.getAllAppointments = async (req, res) => {
-  console.log("🔍 Current user in getAllAppointments:", req.user);
+  console.log(" Current user in getAllAppointments:", req.user);
 
   if (req.user.role !== "admin") {
     return res.status(403).json({

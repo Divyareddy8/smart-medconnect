@@ -2,10 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const User = require('./models/User');
 const bcrypt = require('bcryptjs');
+const User = require('./models/User');
 const protect = require('./middleware/authMiddleware');
-
+const cron = require('node-cron');
 
 dotenv.config();
 
@@ -15,30 +15,57 @@ app.use(express.json());
 
 console.log('Mongo URI:', process.env.MONGO_URI);
 
-//Modification: an admin can no longer register in the database. Instead, when the backend starts, the admin automatically gets registered by the backend
-//              This is to ensure that no unauthorised person makes a new account and simply registers as an admin to access unauthorised data
-//              To login as an admin, set the email to be ADMIN_EMAIL environment variable and password to be ADMIN_PASSWORD environment variable
+//------------------------------------------------------------------
+//  Auto-create Admin and Pharmacy on Server Startup
+// Prevents unauthorized role registration via frontend
+// These users can login only if their credentials match env variables
+//------------------------------------------------------------------
 async function connectDB() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    let user = await User.findOne({ email: process.env.ADMIN_EMAIL });
-    if (user == null){
-      const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
-      const newUser = new User({ name :'Admin', email : process.env.ADMIN_EMAIL, password: hashedPassword, role : 'admin'});
-      await newUser.save();
+
+    //  Ensure admin exists
+    let admin = await User.findOne({ email: process.env.ADMIN_EMAIL });
+    if (!admin) {
+      const hashedAdminPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
+      const newAdmin = new User({
+        name: 'Admin',
+        email: process.env.ADMIN_EMAIL,
+        password: hashedAdminPassword,
+        role: 'admin'
+      });
+      await newAdmin.save();
+      console.log(' Admin user created');
     }
-    console.log('MongoDB connected');
+
+    //  Ensure pharmacy exists
+    let pharmacy = await User.findOne({ email: process.env.PHARMACY_EMAIL });
+    if (!pharmacy) {
+      const hashedPharmacyPassword = await bcrypt.hash(process.env.PHARMACY_PASSWORD, 10);
+      const newPharmacy = new User({
+        name: 'Pharmacy',
+        email: process.env.PHARMACY_EMAIL,
+        password: hashedPharmacyPassword,
+        role: 'pharmacy'
+      });
+      await newPharmacy.save();
+      console.log(' Pharmacy user created');
+    }
+
+    console.log(' MongoDB connected');
   } catch (err) {
-    console.error('MongoDB connection error:', err);
+    console.error(' MongoDB connection error:', err);
   }
 }
 
 connectDB();
 
-// Routes
+//------------------------------------------------------------------
+//  Routes Setup
+//------------------------------------------------------------------
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
-app.use('/auth', authRoutes);
+app.use('/auth', authRoutes); // optional duplicate path
 
 const appointmentRoutes = require('./routes/appointmentRoutes');
 app.use('/api/appointments', appointmentRoutes);
@@ -52,18 +79,21 @@ app.use('/api/admin', adminRoutes);
 const prescriptionRoutes = require('./routes/prescriptionRoutes');
 app.use('/api/prescription', prescriptionRoutes);
 
-app.use('/api/doctors', async (req, res)=>{ //No need to protect it, users that arent logged in can also view details of all the doctors
-  try{
-    const doctors = await User.find({ role: 'doctor'}, '-password');
+//  Public route to get all doctor details (excluding password)
+app.use('/api/doctors', async (req, res) => {
+  try {
+    const doctors = await User.find({ role: 'doctor' }, '-password');
     res.json(doctors);
-  } catch (error){
+  } catch (error) {
     res.status(500).json(error.message);
   }
 });
+
 const doctorRoutes = require('./routes/doctorRoutes');
 app.use('/api/doctors', doctorRoutes);
 
+//------------------------------------------------------------------
+//  Start Server
+//------------------------------------------------------------------
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-const cron = require('node-cron');
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));

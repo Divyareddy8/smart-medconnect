@@ -45,9 +45,33 @@ button, .btn-custom {
   transition: background-color 0.3s ease;
 }
 
+.cancel {
+  background-color: rgba(210, 35, 35, 0.797);
+}
+
 button:hover, .btn-custom:hover {
   background-color: rgba(0, 0, 255, 0.6);
 }
+.cancel:hover {
+  background-color: rgb(210, 35, 35);
+}
+
+.disabled:hover {
+  background-color: rgba(210, 35, 35, 0.797);
+}
+
+.green {
+  background-color: #40ae25bc;
+}
+
+.green:hover {
+  background-color: #40ae25;
+}
+
+.green.disabled:hover {
+  background-color: #40ae25bc;
+}
+
 
 /* Inputs */
 input, select, textarea {
@@ -82,4 +106,22 @@ footer {
   color: #666;
   margin-top: auto;
   box-shadow: 0 -1px 5px rgba(0,0,0,0.05);
+}
+
+.checkbox {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 20px;
+}
+
+.checkbox .input input {
+  width: 20px;
+  margin-right: 5px;
+}
+
+.checkbox .input label {
+  font-size: medium;
+  color: #6d6969;
 }

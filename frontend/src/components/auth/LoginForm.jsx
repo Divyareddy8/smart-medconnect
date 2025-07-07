@@ -15,6 +15,7 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const res = await login(form);
+      console.log(form)
       setToken(res.data.token);
       const role = res.data.user.role;
       navigate(`/${role}`);

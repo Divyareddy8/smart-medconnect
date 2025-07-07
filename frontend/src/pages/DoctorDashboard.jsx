@@ -11,7 +11,7 @@ const DoctorDashboard = () => {
       <main className="flex-grow-1 container py-4">
         <h2 className="mb-4 display-6 fw-bold text-info">Doctor Panel</h2>
         <AppointmentTable />
-        <PrescriptionForm />
+        {/* <PrescriptionForm /> */}
       </main>
       <Footer />
     </div>

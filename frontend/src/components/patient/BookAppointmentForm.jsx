@@ -22,7 +22,8 @@ const BookAppointmentForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/appointments", {
+      console.log(selectedDoctor)
+      await axios.post("/appointments/book", {
         doctorId: selectedDoctor,
         date,
         time,
@@ -30,6 +31,7 @@ const BookAppointmentForm = () => {
       alert("Appointment Booked!");
     } catch (err) {
       alert("Booking failed");
+      console.log(err)
     }
   };
 

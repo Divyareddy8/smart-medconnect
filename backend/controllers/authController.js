@@ -78,14 +78,43 @@ exports.loginUser = async (req, res) => {
 //----------------------------------to Get All Specializations--------------------
 exports.getAllSpecializations = async (req, res) => {
   try {
-    const users = await User.find({ role: "doctor" });
-    const specSet = new Set();
-    users.forEach((user) => {
-      if (user.specializations) {
-        user.specializations.forEach((s) => specSet.add(s));
-      }
-    });
-    res.json([...specSet]);
+    // const users = await User.find({ role: "doctor" });
+    // const specSet = new Set();
+    // users.forEach((user) => {
+    //   if (user.specializations) {
+    //     user.specializations.forEach((s) => specSet.add(s));
+    //   }
+    // });
+    // res.json([...specSet]);
+    res.json(
+      [
+        "Cardiologist", // Heart specialist
+        "Dermatologist", // Skin specialist
+        "Neurologist", // Brain and nervous system
+        "Orthopedic Surgeon", // Bones and joints
+        "Pediatrician", // Children’s health
+        "Psychiatrist", // Mental health
+        "Ophthalmologist", // Eyes
+        "Gynecologist", // Female reproductive health
+        "Oncologist", // Cancer specialist
+        "Endocrinologist", // Hormones and glands
+        "Gastroenterologist", // Digestive system
+        "Nephrologist", // Kidneys
+        "Pulmonologist", // Lungs and respiratory system
+        "Rheumatologist", // Joints, arthritis, autoimmune diseases
+        "Urologist", // Urinary tract and male reproductive system
+        "Hematologist", // Blood disorders
+        "Anesthesiologist", // Pain relief and anesthesia
+        "ENT Specialist", // Ear, Nose, and Throat
+        "General Practitioner", // Overall health and common illnesses
+        "Pathologist", // Diagnoses using lab tests
+        "Radiologist", // Imaging like X-rays, MRIs, etc.
+        "Allergist", // Allergy and immune system
+        "Plastic Surgeon", // Cosmetic and reconstructive surgery
+        "Infectious Disease Specialist", // Diseases caused by pathogens
+        "Geriatrician", // Health care of elderly people
+      ]
+    );
   } catch (err) {
     res.status(500).json({ message: "Error fetching specializations" });
   }

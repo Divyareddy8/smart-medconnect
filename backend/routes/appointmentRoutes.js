@@ -1,5 +1,5 @@
 const express = require('express');
-const { bookAppointment, getDoctorAppointments, getAllAppointments,addPrescription, getOwnAppointments } = require('../controllers/appointmentController');
+const { bookAppointment, getDoctorAppointments, getAllAppointments,addPrescription, getOwnAppointments, updateAppointmentStatus } = require('../controllers/appointmentController');
 const protect = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -20,6 +20,7 @@ router.put('/prescription', protect, addPrescription);
 //Get your own appointments(patients)
 router.get('/self', protect, getOwnAppointments);
 
+router.post('/update/status', protect, updateAppointmentStatus);
 //--------------------------------------------------------------------------
 
 module.exports = router;

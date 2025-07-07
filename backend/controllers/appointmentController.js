@@ -180,18 +180,18 @@ exports.getOwnAppointments = async (req, res) => {
         patient: req.user.id,
       })
         .populate("doctor", "name email")
-        .populate("prescription", "issueDate medicines");
-    } else if (req.user.role === "doctor")
+        .populate("prescription", "issueDate medicines dosage duration");
+    } else if (req.user.role === "doctor") {
       appointments = await Appointment.find({ doctor: req.user.id })
         .populate("patient", "name email")
-        .populate("prescription", "issueDate medicines");
+        .populate("prescription", "issueDate medicines dosage duration");
+    }
     else {
       return res.status(403).json({
         error: "Forbidden",
         message: "Appointments can only be viewed by patients or doctors",
       });
     }
-
     res.json(appointments);
   } catch (err) {
     res
@@ -209,29 +209,29 @@ exports.addPrescription = async (req, res) => {
       message: "Only doctors can add prescriptions",
     });
   }
-
+  
   const { appointmentId, medicines = null } = req.body; //Expect an array of {medicineName, dosage, duration} as medicines
-
+  
   if (!appointmentId) {
     return res
-      .status(400)
-      .json({ error: "Bad request", message: "Appointment Id is required" });
+    .status(400)
+    .json({ error: "Bad request", message: "Appointment Id is required" });
   }
-
+  
   try {
     const appointment = await Appointment.findOne(
       //A doctor can only add prescription to appointments taken by him
       { _id: appointmentId, doctor: req.user.id }
     );
-
+    
     if (!appointment) {
       return res
-        .status(403)
-        .json({ message: "Appointment not found or unauthorized" });
+      .status(403)
+      .json({ message: "Appointment not found or unauthorized" });
     }
-
+    
     let newPrescription;
-
+    
     if (appointment.prescription) {
       // Update existing prescription
       newPrescription = await Prescription.findByIdAndUpdate(
@@ -252,16 +252,58 @@ exports.addPrescription = async (req, res) => {
         issueDate: new Date(),
         medicines,
       });
-
+      
       // Link it to the appointment
       appointment.prescription = newPrescription._id;
       await appointment.save();
     }
-
+    
     res.json(await appointment.populate("prescription", "issueDate medicines"));
   } catch (err) {
     res
-      .status(500)
-      .json({ error: "Error updating prescription", message: err.message });
+    .status(500)
+    .json({ error: "Error updating prescription", message: err.message });
   }
 };
+
+//-----------------------------------------------------Update appointment status (doctor, admin)---------------------------------------------------------------------------------------------------
+
+exports.updateAppointmentStatus = async (req, res)=>{
+  if (req.user.role !== 'doctor' && req.user.role !== 'admin') {
+    return res.status(403).json({
+      error: "Forbidden",
+      message: "Only doctors and admins can update appointment status",
+    })
+  }
+  try {
+    let {appointmentId, status} = req.body;
+    if (!appointmentId || !status) {
+      return res
+      .status(400)
+      .json({ error: "Bad request", message: "appointmentId and status required" });
+    }
+    status = status.toLowerCase();
+    // console.log(appointmentId)
+    if (['pending', 'confirmed', 'completed', 'cancelled'].filter((i)=>i===status).length === 0) {
+      return res
+      .status(400)
+      .json({ error: "Bad request", message: "invalid status" });
+    }
+    let appt = await Appointment
+    .findOneAndUpdate({ doctor: req.user.id, _id: appointmentId }, {status}, {new: true})
+    .populate('patient', 'name email')
+    .populate('prescription', 'issueDate medicines dosage duration')
+    ;
+    if (!appt) {
+      return res.status(403).json({error: "Forbidden", message: "cound not find requested appointment"});
+    }
+    console.log(status)
+    return res.json(appt);
+  }
+
+  catch (err) {
+    res
+    .status(500)
+    .json({ error: "Error updating status", message: err.message });
+  }
+}

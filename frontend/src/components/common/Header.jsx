@@ -12,6 +12,7 @@ const Header = () => {
 
   const handleLogout = () => {
     clearToken();
+    localStorage.clear('role');
     setIsLoggedIn(false);
     navigate('/');
   };

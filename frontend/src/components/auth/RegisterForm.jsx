@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { register } from '../../api/authApi';
 import { useNavigate } from 'react-router-dom';
 import SpecializationSelector from '../patient/SpecializationSelector';
+import { setToken } from '../../utils/tokenHelper';
 
 const RegisterForm = ({ role }) => {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
@@ -22,9 +23,11 @@ const RegisterForm = ({ role }) => {
     }
 
     try {
-      await register(payload);
-      alert('Registered successfully!');
-      navigate('/login');
+      const res = await register(payload);
+      // alert('Registered successfully!');
+      setToken(res.data.token);
+      localStorage.setItem("role", res.data.role);
+      navigate(`/${role}`);
     } catch (err) {
       alert('Registration failed.');
       console.error(err);

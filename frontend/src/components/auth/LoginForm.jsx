@@ -18,9 +18,11 @@ const LoginForm = () => {
       console.log(form)
       setToken(res.data.token);
       const role = res.data.user.role;
+      localStorage.setItem("role", role);
       navigate(`/${role}`);
     } catch (err) {
       alert('Login failed. Please check your credentials.');
+      console.log(err)
     }
   };
 

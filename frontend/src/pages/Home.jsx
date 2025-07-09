@@ -2,11 +2,22 @@ import React from 'react';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import homeImage from '../assets/home.png';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const navigate = useNavigate()
+  const clickHandler = ()=>{
+    if (!localStorage.getItem('role') || localStorage.getItem('role')==="") {
+      navigate('/login')
+    }
+    else {
+      navigate(`/${localStorage.getItem('role')}`)
+    }
+  }
   return (
     <div className="d-flex flex-column min-vh-100">
       <Header />
+      <div style={{height: 50, display: 'flex', justifyContent: 'center', alignItems: 'center'}}><button className='btn-custom text-white px-4 py-2 rounded' onClick={clickHandler}>Dashboard</button></div>
 
       {/* Hero Section */}
       <main className="flex-grow-1">

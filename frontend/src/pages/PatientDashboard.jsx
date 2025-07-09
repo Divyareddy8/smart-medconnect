@@ -9,16 +9,12 @@ import { getMyPrescriptions } from '../api/prescriptionApi';
 
 const PatientDashboard = () => {
   const [appointments, setAppointments] = useState([]);
-  const [prescriptions, setPrescriptions] = useState([]);
-
+  const [prescriptions, setPrescriptions] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const apptRes = await getMyAppointments();
         setAppointments(apptRes.data);
-
-        const presRes = await getMyPrescriptions();
-        setPrescriptions(presRes.data);
       } catch (err) {
         console.error('Failed to fetch dashboard data:', err);
       }
@@ -26,6 +22,10 @@ const PatientDashboard = () => {
 
     fetchData();
   }, []);
+
+  const prescriptionLoader = (prescription)=>{
+    setPrescriptions(prescription);
+  }
 
   return (
     <div className="d-flex flex-column min-vh-100 bg-light">
@@ -36,24 +36,27 @@ const PatientDashboard = () => {
         <div className="row g-4">
           <div className="col-md-6">
             <div className="bg-white p-4 rounded shadow-sm">
+              <Link to="/book" className="btn btn-outline-primary mb-3">
+                + Book new appointment
+              </Link>
               <h4 className="fw-bold mb-3">Your Upcoming Appointments</h4>
               {appointments.length ? (
-                appointments.map((appt) => (
-                  <AppointmentCard key={appt._id} appointment={appt} />
+                appointments.sort((a, b)=>{
+                  if (new Date(a.date) > new Date(b.date)) return -1;
+                  return 1;
+                }).map((appt) => (
+                  <AppointmentCard key={appt._id} appointment={appt} prescriptionLoader={prescriptionLoader} />
                 ))
               ) : (
                 <p>No upcoming appointments.</p>
               )}
-              <Link to="/book" className="btn btn-outline-primary mt-3">
-                + Book new appointment
-              </Link>
             </div>
           </div>
 
           <div className="col-md-6">
             <div className="bg-white p-4 rounded shadow-sm">
-              <h4 className="fw-bold mb-3">Recent Prescriptions</h4>
-              <PrescriptionList prescriptions={prescriptions} />
+              {/* <h4 className="fw-bold mb-3">Prescriptions</h4> */}
+              <PrescriptionList prescription={prescriptions} />
             </div>
           </div>
         </div>

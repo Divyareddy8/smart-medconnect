@@ -56,8 +56,11 @@ button:hover, .btn-custom:hover {
   background-color: rgb(210, 35, 35);
 }
 
+.disabled {
+  background-color: rgba(210, 35, 35, 0.494);
+}
 .disabled:hover {
-  background-color: rgba(210, 35, 35, 0.797);
+  background-color: rgba(210, 35, 35, 0.494);
 }
 
 .green {
@@ -68,9 +71,13 @@ button:hover, .btn-custom:hover {
   background-color: #40ae25;
 }
 
-.green.disabled:hover {
-  background-color: #40ae25bc;
+.green.disabled {
+  background-color: #40ae257a;
 }
+
+/* .green.disabled:hover {
+  background-color: #40ae25bc;
+} */
 
 
 /* Inputs */
